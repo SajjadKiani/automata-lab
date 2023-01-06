@@ -1,6 +1,6 @@
 class DFA:
 
-    def __init__(self, states: list, input_symbols: list, transitions: list, initial_state: str, final_states: list):
+    def __init__(self, states, input_symbols, transitions, initial_state, final_states):
         self.states = states
         self.input_symbols = input_symbols
         self.transitions = transitions
@@ -37,18 +37,32 @@ class DFA:
             return False
 
     def union(self, dfa):
-        new_initial_state = (self.initial_state, dfa.initial_state)
+        new_initial_states = (self.initial_state, dfa.initial_state)
+        new_final_states = (self.final_states, dfa.final_states)
 
-        new_transition = {}
+        new_transitions = {}
 
         for i in self.transitions:
-            for j in dfa.transitions:
-                new_transition,
+            for value in self.transitions[i]:
+                for j in dfa.transitions:
+                    if i + j in new_transitions:
+                        new_transitions[i + j].update(
+                            {value: self.transitions[i][value] + dfa.transitions[j][value]})
+                    else:
+                        new_transitions[i + j] = {value: self.transitions[i][value] + dfa.transitions[j][value]}
 
-        return DFA()
+        return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
     def is_empty(self):
         return len(self.final_states) == 0
 
     def minify(self):
         pass
+
+    def __str__(self):
+        print('dfa: ')
+        for i in self.transitions:
+            print('\t' + i + ': ', self.transitions[i])
+        print('initial states:', self.initial_state)
+        print('final states', self.final_states)
+        return ''
