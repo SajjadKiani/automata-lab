@@ -56,9 +56,6 @@ class DFA:
     def is_empty(self):
         return len(self.final_states) == 0
 
-    def minify(self):
-        pass
-
     def __str__(self):
         print('dfa: ')
         for i in self.transitions:
@@ -68,68 +65,71 @@ class DFA:
         return ''
 
     def minimize(self):
-
+        # Applying the minimization algorithm (in example 2.41)
         states_not_equal = []
         is_finished = False
-        while(not is_finished):
+        while(not is_finished): # Run until there is no change in states_not_equal
             visited=[]
             is_finished = True
             for state1 in self.states[:-1]:
                 for state2 in self.states[1:]:
-                    if set((state1,state2)) in visited or state1 == state2:
+                    if set((state1,state2)) in visited + states_not_equal or state1 == state2:
                         continue
                     else:
                         visited.append(set((state1,state2)))
-                    if set((state1,state2)) not in states_not_equal:
-                        if (state1 in self.final_states and state2 not in self.final_states) or (state1 not in self.final_states and state2 in self.final_states):
-                            states_not_equal.append(set((state1,state2)))
-                            is_finished = False
-                        elif set((self.transitions[state1][str(self.input_symbols[0])],self.transitions[state2][str(self.input_symbols[0])])) in states_not_equal or set((self.transitions[state1][str(self.input_symbols[1])],self.transitions[state2][str(self.input_symbols[1])])) in states_not_equal:
-                            states_not_equal.append(set((state1,state2)))
-                            is_finished = False
+                    # If one of two states is a final state and the other isn't, they are not equal.
+                    if (state1 in self.final_states and state2 not in self.final_states) or (state1 not in self.final_states and state2 in self.final_states):
+                        states_not_equal.append(set((state1,state2)))
+                        is_finished = False
+                    # If we transition from two states with a symbol, and the two destinations are not equal, then the two states are not equal.
+                    elif set((self.transitions[state1][str(self.input_symbols[0])],self.transitions[state2][str(self.input_symbols[0])])) in states_not_equal or set((self.transitions[state1][str(self.input_symbols[1])],self.transitions[state2][str(self.input_symbols[1])])) in states_not_equal:
+                        states_not_equal.append(set((state1,state2)))
+                        is_finished = False
         
-
+        # Creating a dictionary with states as keys and for each key, the assigned value is a list of states, 
+        # that are equal to that key according to the states_not_equal.
         minimized_states = {}
         for state in self.states:
             minimized_states[state] = [state]
         for states_set in visited:
             if states_set not in states_not_equal:
                 minimized_states[tuple(states_set)[0]].append(tuple(states_set)[1])
+        # adding states that are equal to a state in values of a key, to the values of that key. (if state1~state2 & state2~state3 => state1~state3)
         for key,value in minimized_states.items():
             for item in value:
                 if key not in minimized_states[item]:
                     minimized_states[str(item)].append(key)
-
+        # Finding duplicates and removing them.
         to_be_deleted = []
         visited = []
         for key,value in minimized_states.items():
             for item in value:
                 if not item == key and item not in to_be_deleted and item not in visited:
                     to_be_deleted.append(item)
-            visited.append(key)    
+            visited.append(key)
         for item in to_be_deleted:
             if item in minimized_states.keys():
                 minimized_states.pop(item)
 
-
+        # Finding transitions & initial state & final states of the minimized DFA:
         minimized_transitions = {}
-        for key in minimized_states.keys():
-            transitions_from_key = self.transitions[key]
-            for symbol,destination in transitions_from_key.items():
-                for state in minimized_states.keys():
-                    if destination in minimized_states[state]:
-                        transitions_from_key[symbol] = state
-            minimized_transitions[key] = transitions_from_key
-        
-
         minimized_final_states = []
-        for key in minimized_states.keys():
-            if self.initial_state in minimized_states[key]:
-                minimized_initial_state = key
-            if key in self.final_states:
-                minimized_final_states.append(key)
+        for state in minimized_states.keys():
+            # Finding transitions for each new state:
+            transitions_from_key = self.transitions[state]
+            for symbol,destination in transitions_from_key.items():
+                for possible_destination in minimized_states.keys():
+                    if destination in minimized_states[possible_destination]:
+                        transitions_from_key[symbol] = possible_destination
+            minimized_transitions[state] = transitions_from_key
+            # Finding initial state of the minimized DFA:
+            if self.initial_state in minimized_states[state]:
+                minimized_initial_state = state
+            # Finding final states of the minimized DFA:
+            if state in self.final_states:
+                minimized_final_states.append(state)
         
-
+        # Create minimized DFA and return it.
         return DFA(
             states = list(minimized_states.keys()),
             input_symbols = self.input_symbols,
