@@ -22,18 +22,12 @@ class DFA:
     def accept_language(self, string):
 
         current_state = self.initial_state
-        print('-> ' + current_state, end=' ')
         for i in string:
             current_state = self.transitions[current_state][i]
-            print('-> ' + current_state, end=' ')
 
         if current_state in self.final_states:
-            print()
-            print('accepted by DFA!')
             return True
         else:
-            print()
-            print('not accepted by DFA!')
             return False
 
     def union(self, dfa):
@@ -54,7 +48,20 @@ class DFA:
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
     def is_empty(self):
-        return len(self.final_states) == 0
+        answer = []
+        self._is_empty(len(self.states) - 1, answer)
+        return len(answer) == 0
+
+    def _is_empty(self, lenght, answer, string=''):
+        if self.accept_language(string):
+            answer.append(string)
+
+        if lenght == 0:
+            return
+
+        for i in self.input_symbols:
+            self._is_empty(lenght - 1,answer, string + i)
+
 
     def __str__(self):
         print('dfa: ')
