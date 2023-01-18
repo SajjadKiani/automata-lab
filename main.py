@@ -1,4 +1,5 @@
 from dfa import DFA
+from nfa import NFA
 
 if __name__ == '__main__':
     dfa = DFA (
@@ -49,7 +50,19 @@ if __name__ == '__main__':
     # )
     # print(test_dfa.minimize())
 
-    print (dfa.is_empty())
-    print (dfa.is_finite())
-    print (dfa.shortest_language())
-    print (dfa.longest_language())
+    # print (dfa.is_empty())
+    # print(test_dfa.minimize())
+    test_nfa = NFA(
+        states=['q1', 'q2', 'q3','q4', 'q5'],
+        input_symbols=['a', 'b'],
+        transitions={
+            'q1': {'a': ['q1'], '': ['q2','q4']},
+            'q2': {'a': ['q3'], 'b': ['q5'],},
+            'q3': {'b': ['q2']},
+            'q4': {'a': ['q5'], 'b': ['q4']},
+            'q5': {}
+        },
+        initial_state='q1',
+        final_states=['q5']
+    )
+    print(test_nfa.eliminate_nondeterminism())
