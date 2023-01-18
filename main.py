@@ -53,16 +53,17 @@ if __name__ == '__main__':
     # print (dfa.is_empty())
     # print(test_dfa.minimize())
     test_nfa = NFA(
-        states=['q1', 'q2', 'q3','q4', 'q5'],
+        states=['q0','q1', 'q2', 'q3','q4'],
         input_symbols=['a', 'b'],
         transitions={
-            'q1': {'a': ['q1'], '': ['q2','q4']},
-            'q2': {'a': ['q3'], 'b': ['q5'],},
-            'q3': {'b': ['q2']},
-            'q4': {'a': ['q5'], 'b': ['q4']},
-            'q5': {}
+            'q0': {'a':['q1','q2'],'b':['q4']},
+            'q1': {'a': ['q0']},
+            'q2': {'a': ['q3']},
+            'q3': {'b': ['q0']},
+            'q4': {},
+            
         },
-        initial_state='q1',
-        final_states=['q5']
+        initial_state='q0',
+        final_states=['q4']
     )
     print(test_nfa.eliminate_nondeterminism())

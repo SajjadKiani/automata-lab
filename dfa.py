@@ -85,7 +85,7 @@ class DFA:
         print('final states', self.final_states)
         return ''
 
-    def minimize(self):
+    def minimize(self): #TODO: delete states that are not reachable from initial state.
         # Applying the minimization algorithm (in example 2.41)
         states_not_equal = []
         is_finished = False
@@ -149,7 +149,28 @@ class DFA:
             # Finding final states of the minimized DFA:
             if state in self.final_states:
                 minimized_final_states.append(state)
-        
+
+        # Find states that are not reachable from initial state.
+        visited = []
+        fringe = [minimized_initial_state]
+        while fringe:
+            popped_state = fringe.pop()
+            visited.append(popped_state)
+            for sym in self.input_symbols:
+                if minimized_transitions[popped_state][sym] not in fringe+visited:
+                    fringe.append(minimized_transitions[popped_state][sym])
+        # Delete states that are not reachable from initial state.
+        to_be_deleted = []
+        for state in minimized_states.keys():
+            if state not in visited:
+                to_be_deleted.append(state)
+        for state in to_be_deleted:
+            minimized_states.pop(state)
+            minimized_transitions.pop(state)
+            if state in minimized_final_states:
+                minimized_final_states.pop(state)
+
+
         # Create minimized DFA and return it.
         return DFA(
             states = list(minimized_states.keys()),
