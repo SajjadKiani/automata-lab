@@ -50,3 +50,4 @@ if __name__ == '__main__':
     # print(test_dfa.minimize())
 
     print (dfa.is_empty())
+    print (dfa.is_finite())

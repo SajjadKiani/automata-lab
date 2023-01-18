@@ -49,18 +49,23 @@ class DFA:
 
     def is_empty(self):
         answer = []
-        self._is_empty(len(self.states) - 1, answer)
+        self.all_language_accept(0 , len(self.states) - 1, answer)
         return len(answer) == 0
 
-    def _is_empty(self, lenght, answer, string=''):
+    def all_language_accept(self,min_lenght, max_lenght, answer, string=''):
         if self.accept_language(string):
             answer.append(string)
 
-        if lenght == 0:
+        if max_lenght == min_lenght:
             return
 
         for i in self.input_symbols:
-            self._is_empty(lenght - 1,answer, string + i)
+            self.all_language_accept(min_lenght, max_lenght - 1,answer, string + i)
+
+    def is_finite(self):
+        answer = []
+        self.all_language_accept (len(self.states) , 2 * len(self.states) - 1, answer)
+        return not len(answer) == 0
 
 
     def __str__(self):
