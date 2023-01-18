@@ -67,6 +67,15 @@ class DFA:
         self.all_language_accept (len(self.states) , 2 * len(self.states) - 1, answer)
         return not len(answer) == 0
 
+    def shortest_language(self):
+        answer = []
+        self.all_language_accept(0 , len(self.states) - 1, answer)
+        return min(answer,key=len )
+
+    def longest_language(self):
+        answer = []
+        self.all_language_accept(0 , len(self.states) - 1, answer)
+        return max(answer,key=len )
 
     def __str__(self):
         print('dfa: ')

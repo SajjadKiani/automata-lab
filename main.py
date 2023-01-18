@@ -51,3 +51,5 @@ if __name__ == '__main__':
 
     print (dfa.is_empty())
     print (dfa.is_finite())
+    print (dfa.shortest_language())
+    print (dfa.longest_language())
