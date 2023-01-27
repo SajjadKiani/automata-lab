@@ -92,6 +92,9 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
+    def seperate(self,dfa):
+        intersection = self.intersection(dfa)
+        return intersection.is_empty()
 
     def is_empty(self):
         answer = []
