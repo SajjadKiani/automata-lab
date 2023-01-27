@@ -96,6 +96,14 @@ class DFA:
         intersection = self.intersection(dfa)
         return intersection.is_empty()
 
+    def completment(self):
+        new_final_states = []
+        for i in self.states:
+            if i not in self.final_states:
+                new_final_states.append(i)
+            
+        return DFA(self.states,self.input_symbols,self.transitions,self.initial_state,new_final_states)
+
     def is_empty(self):
         answer = []
         self.all_language_accept(0 , len(self.states) - 1, answer)
