@@ -69,7 +69,28 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
-    
+    def difference(self, dfa):
+        new_initial_states = (self.initial_state, dfa.initial_state)
+        new_final_states = []
+
+        for i in self.states :
+            for j in dfa.states :
+                if i in self.final_states and  j not in dfa.final_states:
+                    new_final_states.append(i+j)
+
+
+        new_transitions = {}
+
+        for i in self.transitions:
+            for value in self.transitions[i]:
+                for j in dfa.transitions:
+                    if i + j in new_transitions:
+                        new_transitions[i + j].update(
+                            {value: self.transitions[i][value] + dfa.transitions[j][value]})
+                    else:
+                        new_transitions[i + j] = {value: self.transitions[i][value] + dfa.transitions[j][value]}
+
+        return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
 
     def is_empty(self):
