@@ -1,6 +1,6 @@
 from dfa import DFA
 from nfa import NFA
-
+from dpda import DPDA
 if __name__ == '__main__':
     dfa = DFA (
         states=['q0', 'q1', 'q2'],
@@ -66,4 +66,20 @@ if __name__ == '__main__':
         initial_state='q0',
         final_states=['q4']
     )
-    print(test_nfa.eliminate_nondeterminism())
+    # print(test_nfa.eliminate_nondeterminism())
+
+    dpda = DPDA(
+        states={'q0', 'q1'},
+        input_symbols={'[', ']'},
+        stack_symbols = {'[',']','Z0'},
+        initial_stack_symbol = 'Z0',
+        transitions={
+            'q0': {'[':{'Z0': ['q1',['[','Z0']]}},
+            'q1': {'[':{'[': ['q1',['[','[']]},']':{'[': ['q1',[]]},'':{'Z0':['q0',['Z0']]}}
+        },
+        initial_state='q0',
+        final_states={'q0'}
+    )
+    print(dpda.accept_string("[[[[]][]]]"))
+    
+
