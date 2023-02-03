@@ -93,8 +93,12 @@ class DFA:
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
     def seperate(self,dfa):
-        intersection = self.intersection(dfa)
-        return intersection.is_empty()
+        diff1 = self.difference(dfa)
+        diff2 = dfa.difference(self)
+        if diff1.is_empty() or diff2.is_empty():
+            return True
+        else :
+            return False
 
     def completment(self):
         new_final_states = []
