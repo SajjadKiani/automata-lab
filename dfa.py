@@ -19,7 +19,8 @@ class DFA:
         #     final_states={'q1'}
         # )
 
-    def accept_language(self, string):
+    # accepts a string and returns True if the string is accepted by the DFA
+    def accept_string(self, string):
 
         current_state = self.initial_state
         for i in string:
@@ -29,13 +30,26 @@ class DFA:
             return True
         else:
             return False
-
+        
+    # returns union of two DFAs
     def union(self, dfa):
-        new_initial_states = (self.initial_state, dfa.initial_state)
-        new_final_states = (self.final_states, dfa.final_states)
+        # concatanation of initial states
+        new_initial_states = []
+        for i in self.initial_state:
+            for j in dfa.initial_state:
+                new_initial_states.append (i+j)
+
+        new_final_states = []
+
+        # union of final states
+        for i in self.states :
+            for j in dfa.states :
+                if i in self.final_states or j in dfa.final_states:
+                    new_final_states.append(i+j)
 
         new_transitions = {}
 
+        # create new transitions
         for i in self.transitions:
             for value in self.transitions[i]:
                 for j in dfa.transitions:
@@ -47,10 +61,16 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
+    # returns intersection of two DFAs
     def intersection(self, dfa):
-        new_initial_states = (self.initial_state, dfa.initial_state)
+        new_initial_states = []
+        for i in self.initial_state:
+            for j in dfa.initial_state:
+                new_initial_states.append (i+j)
+
         new_final_states = []
 
+        # intersection of final states
         for i in self.states :
             for j in dfa.states :
                 if i in self.final_states and j in dfa.final_states:
@@ -58,6 +78,7 @@ class DFA:
 
         new_transitions = {}
 
+        # create new transitions
         for i in self.transitions:
             for value in self.transitions[i]:
                 for j in dfa.transitions:
@@ -69,8 +90,14 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
+    # returns difference of two DFAs
     def difference(self, dfa):
-        new_initial_states = (self.initial_state, dfa.initial_state)
+        # concatanation of initial states
+        new_initial_states = []
+        for i in self.initial_state:
+            for j in dfa.initial_state:
+                new_initial_states.append (i+j)
+                
         new_final_states = []
 
         for i in self.states :
@@ -92,6 +119,7 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
+    # returns True if two FDAs are seperated
     def seperate(self,dfa):
         diff1 = self.difference(dfa)
         diff2 = dfa.difference(self)
@@ -100,6 +128,7 @@ class DFA:
         else :
             return False
 
+    # returns complement of DFA
     def completment(self):
         new_final_states = []
         for i in self.states:
@@ -108,36 +137,42 @@ class DFA:
             
         return DFA(self.states,self.input_symbols,self.transitions,self.initial_state,new_final_states)
 
+    # returns True if DFA is empty
     def is_empty(self):
         answer = []
-        self.all_language_accept(0 , len(self.states) - 1, answer)
+        self.all_string_accept(0 , len(self.states) - 1, answer)
         return len(answer) == 0
 
-    def all_language_accept(self,min_lenght, max_lenght, answer, string=''):
-        if self.accept_language(string):
+    # returns all strings accepted by DFA
+    def all_string_accept(self,min_lenght, max_lenght, answer, string=''):
+        if self.accept_string(string):
             answer.append(string)
 
         if max_lenght == min_lenght:
             return
 
         for i in self.input_symbols:
-            self.all_language_accept(min_lenght, max_lenght - 1,answer, string + i)
+            self.all_string_accept(min_lenght, max_lenght - 1,answer, string + i)
 
+    # returns True if DFA is finite
     def is_finite(self):
         answer = []
-        self.all_language_accept (len(self.states) , 2 * len(self.states) - 1, answer)
+        self.all_string_accept (len(self.states) , 2 * len(self.states) - 1, answer)
         return not len(answer) == 0
 
-    def shortest_language(self):
+    # returns shortest string accepted by DFA
+    def shortest_string(self):
         answer = []
-        self.all_language_accept(0 , len(self.states) - 1, answer)
+        self.all_string_accept(0 , len(self.states) - 1, answer)
         return min(answer,key=len )
 
-    def longest_language(self):
+    # returns longest string accepted by DFA
+    def longest_string(self):
         answer = []
-        self.all_language_accept(0 , len(self.states) - 1, answer)
+        self.all_string_accept(0 , len(self.states) - 1, answer)
         return max(answer,key=len )
 
+    # prints DFA
     def __str__(self):
         print('dfa: ')
         for i in self.transitions:
