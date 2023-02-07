@@ -99,3 +99,11 @@ class NFA:
                 if s not in visited:
                     states_set.add(s)
         return visited
+    
+    def __str__(self):
+        print('nfa: ')
+        for i in self.transitions:
+            print('\t' + i + ': ', self.transitions[i])
+        print('initial states:', self.initial_state)
+        print('final states', self.final_states)
+        return ''
