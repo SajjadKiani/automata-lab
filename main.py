@@ -80,6 +80,9 @@ if __name__ == '__main__':
         initial_state='q0',
         final_states={'q0'}
     )
-    print(dpda.accept_string("[[[[]][]]]"))
+    # print(dpda.accept_string("[[[[]][]]]"))
+
+    answer = DFA.regex_to_dfa('b*')
+    print (NFA (answer['states'], answer['input_symbols'], answer['transitions'], answer['initial_state'], answer['final_state']))
     
 
