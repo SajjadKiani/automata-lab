@@ -1,8 +1,18 @@
 from collections import deque
 
-class DPDA:
 
-    def __init__(self, states, input_symbols , stack_symbols, initial_stack_symbol, transitions, initial_state, final_states):
+class DPDA:
+    # Deterministic Push-Down Automata Class
+    def __init__(
+        self,
+        states,
+        input_symbols,
+        stack_symbols,
+        initial_stack_symbol,
+        transitions,
+        initial_state,
+        final_states,
+    ):
         self.states = states
         self.input_symbols = input_symbols
         self.stack_symbols = stack_symbols
@@ -26,7 +36,7 @@ class DPDA:
         # )
 
     def accept_string(self, string):
-
+        # returning true if a string is accepted by dpda
         current_state = self.initial_state
         stack = deque()
         stack.append(self.initial_stack_symbol)
@@ -34,35 +44,54 @@ class DPDA:
         while index < len(string):
             top_of_stack = stack.pop()
             symbol = string[index]
-            if current_state in self.transitions.keys() and symbol in self.transitions[current_state].keys() and top_of_stack in self.transitions[current_state][symbol].keys():
+            # alphabet-transition
+            if (
+                current_state in self.transitions.keys()
+                and symbol in self.transitions[current_state].keys()
+                and top_of_stack in self.transitions[current_state][symbol].keys()
+            ):
                 move = self.transitions[current_state][symbol][top_of_stack]
                 current_state = move[0]
                 to_push = move[1]
                 if len(to_push) != 0:
-                    for i in range(1,len(to_push)+1):
+                    # push symbols into stack
+                    for i in range(1, len(to_push) + 1):
                         sym = to_push[-i]
                         stack.append(sym)
+                # next Symbol
                 index = index + 1
-            elif current_state in self.transitions.keys() and '' in self.transitions[current_state].keys() and top_of_stack in self.transitions[current_state][''].keys():
-                move = self.transitions[current_state][''][top_of_stack]
+            # lambda-transition
+            elif (
+                current_state in self.transitions.keys()
+                and "" in self.transitions[current_state].keys()
+                and top_of_stack in self.transitions[current_state][""].keys()
+            ):
+                move = self.transitions[current_state][""][top_of_stack]
                 current_state = move[0]
                 to_push = move[1]
                 if len(to_push) != 0:
-                    for i in range(1,len(to_push)+1):
+                    # push symbols into stack
+                    for i in range(1, len(to_push) + 1):
                         sym = to_push[-i]
                         stack.append(sym)
             else:
                 return False
-        
+
+        # Do lambda-transitions if there are any
         is_finished = False
-        while(not is_finished):
+        while not is_finished:
             top_of_stack = stack.pop()
-            if current_state in self.transitions.keys() and '' in self.transitions[current_state].keys() and top_of_stack in self.transitions[current_state][''].keys():
-                move = self.transitions[current_state][''][top_of_stack]
+            if (
+                current_state in self.transitions.keys()
+                and "" in self.transitions[current_state].keys()
+                and top_of_stack in self.transitions[current_state][""].keys()
+            ):
+                move = self.transitions[current_state][""][top_of_stack]
                 current_state = move[0]
                 to_push = move[1]
                 if len(to_push) != 0:
-                    for i in range(1,len(to_push)+1):
+                    # push symbols into stack
+                    for i in range(1, len(to_push) + 1):
                         sym = to_push[-i]
                         stack.append(sym)
             else:

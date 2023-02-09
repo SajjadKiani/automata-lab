@@ -180,7 +180,7 @@ class DFA:
         print('final states', self.final_states)
         return ''
 
-    def minimize(self):  # TODO: delete states that are not reachable from initial state.
+    def minimize(self):
         # Applying the minimization algorithm (in example 2.41)
         states_not_equal = []
         is_finished = False
