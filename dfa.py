@@ -118,8 +118,13 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
-    # returns True if two FDAs are separated
-    def separate(self, dfa):
+    # returns True if two DFAs are separated
+    def separate(self,dfa):
+        intersection = self.intersection(dfa)
+        return intersection.is_empty()
+
+    # return true if two DFA are subset
+    def subset(self, dfa):
         diff1 = self.difference(dfa)
         diff2 = dfa.difference(self)
         if diff1.is_empty() or diff2.is_empty():
