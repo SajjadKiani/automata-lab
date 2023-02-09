@@ -1,42 +1,9 @@
-# Automata Project
-
-## Table of Contents
-1. [DFA (Deterministic Finite Automata)](#DFA (Deterministic Finite Automata))
-    1. [Class `DFA`](#Class `DFA`)
-        1. [Example Usage](#Example Usage)
-    2. [Methods](#Methods)
-         1. [accept_string (self, string)](#accept_string (self, string))
-         2. [union (self, other)](#union (self, other))
-         3. [intersection (self, other)](#intersection (self, other))
-         4. [complement (self)](#complement (self))
-         5. [difference (self, other)](#difference (self, other))
-         6. [separate (self,dfa)](#separate (self,dfa))
-         7. [is_empty (self)](#is_empty (self))
-         8. [all_string_accepte (self, min_lenght, max_lenght, answer)](#all_string_accepte (self, min_lenght, max_lenght, answer))
-         9. [is_finite (self)](#is_finite (self))
-         10. [shortest_string (self)](#shortest_string (self))
-         11. [longest_string (self)](#longest_string (self))
-         12. [minimize (self)](#minimize (self))
-         13. [regex_to_dfa (self, regex)](#regex_to_dfa (self, regex))
-         14. [dfa_to_regex (self, dfa)](#dfa_to_regex (self, dfa))
-2. [NFA (Non-Deterministic Finite Automata)](#NFA (Non-Deterministic Finite Automata))
-    1. [Class `NFA`](#Class `NFA`)
-        1. [Example Usage](#Example Usage)
-    2. [Methods](#Methods)
-         1. [lambda_closure(states_set, transitions)](#lambda_closure (states_set, transitions))
-         2. [eliminate_nondeterminism(self)](#eliminate_nondeterminism (self))
-3. [DPDA (Deterministic Pushdown Automata)](#DPDA (Deterministic Pushdown Automata))
-    1. [Class `DPDA`](#Class `DPDA`)
-        1. [Example Usage](#Example Usage)
-    2. [Methods](#Methods)
-         1. [accept_string (self, string)](#accept_string (self, string))
-
-# DFA (Deterministic Finite Automata)
+# DFA(Deterministic Finite Automata)
 
 
 This is a Python implementation of a Deterministic Finite Automata (DFA), which is a simple abstract machine that recognizes patterns in strings. The implementation provides a basic framework for defining and working with DFAs.
 
-## Class `DFA`
+## Class`DFA`
 
 The `DFA` class represents a DFA. It has the following methods:
 
@@ -50,7 +17,7 @@ This method is the constructor for the `DFA` class. It takes the following param
 *   `initial_state`: The state in which the DFA starts.
 *   `final_states`: A list of the accept states of the DFA.
 
-### Example Usage
+### ExampleUsage
 
 Here's an example of how to use the `DFA` class to define:
 
@@ -184,7 +151,7 @@ This method is the constructor for the `DFA` class. It takes the following param
 *   `initial_state`: The state in which the DFA starts.
 *   `final_states`: A list of the accept states of the DFA.
 
-### Example Usage
+### ExampleUsage
 
 Here's an example of how to use the `NFA` class to define:
 
@@ -234,7 +201,7 @@ The DPDA class is initialized with several parameters that define the properties
 * `initial_stack_symbol`: the start symbol for the stack
 * `final_states`: a set of states that are designated as accept states
 
-### Example Usage
+### ExampleUsage
 
 Here's an example of how to use the `DPDA` class to define:
 
