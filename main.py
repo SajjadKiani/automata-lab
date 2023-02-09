@@ -82,7 +82,20 @@ if __name__ == '__main__':
     )
     # print(dpda.accept_string("[[[[]][]]]"))
 
-    answer = DFA.regex_to_dfa('b*')
-    print (NFA (answer['states'], answer['input_symbols'], answer['transitions'], answer['initial_state'], answer['final_state']))
-    
+    # answer = DFA.regex_to_dfa('b*')
+    # print (NFA (answer['states'], answer['input_symbols'], answer['transitions'], answer['initial_state'], answer['final_state']))
+
+    # Convert the DFA to a Regular Expression
+    test_dfa = DFA(
+        states=['1', '2', '3'],
+        input_symbols=['a', 'b'],
+        transitions={
+            '1': {'a': '1', 'b': '2'},
+            '2': {'a': '1', 'b': '3'},
+            '3': {'a': '1', 'b': '2'}
+        },
+        initial_state='1',
+        final_states=['2']
+    )
+    print (DFA.dfa_to_regex(test_dfa))
 

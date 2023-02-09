@@ -403,3 +403,48 @@ class DFA:
                 'initial_state': initial_state,
                 'final_state': final_state
             }
+        
+    # dfa to regex
+    def dfa_to_regex(dfa):
+        # create table r(p,q,0)
+        transition_matrix = {}
+        for origin_state in dfa.states:
+            transition_matrix[origin_state] = {}
+            
+            for dest_state in dfa.states:
+                transition = list (filter(lambda t: dfa.transitions[origin_state][t] == dest_state,  dfa.transitions[origin_state]) )
+                transition = transition[0] if len(transition) != 0 else ''
+
+                if origin_state == dest_state:
+                    transition = transition + ' + \u039B' if len(transition) != 0 else '\u039B'
+
+                transition_matrix[origin_state].update({dest_state: transition})
+
+        
+        # calculate L(p,q,k+1)
+        def formula(p,q,x):
+            k = int(x)-1
+
+            if k <= 0:
+                return transition_matrix[str(p)][str(q)]
+
+            # L(p,q,k+1) = L(p,q,k) U L(p,k+1,k)L(k+1,k+1,k)*L(k+1,q,k)
+            tokens = [(p,q,k), (p,k+1,k), (k+1,k+1,k), (k+1,q,k)]
+
+            answer = []
+            for token in tokens:
+                answer.append (formula(token[0], token[1], token[2]))
+
+            return '({}) U ({}) ({})* ({})'.format(answer[0], answer[1], answer[2], answer[3])
+
+        p = dfa.initial_state
+        final_states = dfa.final_states
+        x = len(dfa.states)
+
+        answer = []
+        for q in final_states:
+            answer.append(formula(p,q,x))
+
+        return answer
+
+
