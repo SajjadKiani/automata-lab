@@ -118,8 +118,8 @@ class DFA:
 
         return DFA(self.states, self.input_symbols, new_transitions, new_initial_states, new_final_states)
 
-    # returns True if two FDAs are seperated
-    def seperate(self, dfa):
+    # returns True if two FDAs are separated
+    def separate(self, dfa):
         diff1 = self.difference(dfa)
         diff2 = dfa.difference(self)
         if diff1.is_empty() or diff2.is_empty():
@@ -128,7 +128,7 @@ class DFA:
             return False
 
     # returns complement of DFA
-    def completment(self):
+    def complement(self):
         new_final_states = []
         for i in self.states:
             if i not in self.final_states:
