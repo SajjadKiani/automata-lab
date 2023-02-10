@@ -34,10 +34,7 @@ class DFA:
     # returns union of two DFAs
     def union(self, dfa):
         # concatanation of initial states
-        new_initial_states = []
-        for i in self.initial_state:
-            for j in dfa.initial_state:
-                new_initial_states.append(i + j)
+        new_initial_states = self.initial_state + dfa.initial_state
 
         new_final_states = []
 
@@ -63,10 +60,7 @@ class DFA:
 
     # returns intersection of two DFAs
     def intersection(self, dfa):
-        new_initial_states = []
-        for i in self.initial_state:
-            for j in dfa.initial_state:
-                new_initial_states.append(i + j)
+        new_initial_states = self.initial_state + dfa.initial_state
 
         new_final_states = []
 
@@ -93,10 +87,7 @@ class DFA:
     # returns difference of two DFAs
     def difference(self, dfa):
         # concatanation of initial states
-        new_initial_states = []
-        for i in self.initial_state:
-            for j in dfa.initial_state:
-                new_initial_states.append(i + j)
+        new_initial_states = self.initial_state + dfa.initial_state
 
         new_final_states = []
 
@@ -257,8 +248,8 @@ class DFA:
             popped_state = fringe.pop()
             visited.append(popped_state)
             for sym in self.input_symbols:
-                if minimized_transitions[popped_state][sym] not in fringe + visited:
-                    fringe.append(minimized_transitions[popped_state][sym])
+                if minimized_transitions[popped_state][str(sym)] not in fringe + visited:
+                    fringe.append(minimized_transitions[popped_state][str(sym)])
         # Delete states that are not reachable from initial state.
         to_be_deleted = []
         for state in minimized_states.keys():

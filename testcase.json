@@ -32,5 +32,15 @@
     },
     "initial_state": "q0",
     "final_states": ["q4"]
+},{
+    "states":["1", "2", "3"],
+    "input_symbols":["a", "b"],
+    "transitions":{
+        "1": {"a": "1", "b": "2"},
+        "2": {"a": "1", "b": "3"},
+        "3": {"a": "1", "b": "2"}
+    },
+    "initial_state":"1",
+    "final_states":["2"]
 }
 ]
